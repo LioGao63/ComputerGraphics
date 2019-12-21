@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"> 
+    <title>HW3</title>
+    <meta http-equiv="Content-Type" content="text/html"; charset="utf-8" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> 
+
+	<script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="initShaders.js"></script>
+    <script type="text/javascript" src="MV.js"></script>
+    <script type="text/javascript" src="honoluluMeshData.js"></script>
+    <script type="text/javascript" src="hw3.js"></script>
+</head>
+<body>
+	<style>
+		body{min-height:300px;padding-top:90px;background: #f6f6f6;}.container{width:98%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.CodeMirror{min-height:300px;;font-family: Menlo,Monaco,Consolas,"Andale Mono","lucida console","Courier New",monospace;}#textareaCode{min-height:300px}#iframeResult{display: block;overflow: hidden;border:0!important;min-width:100px;width:100%;min-height:300px;background-color:#fff}@media screen and (max-width:768px){#textareaCode{height:300px}.CodeMirror{height:300px;font-family: Menlo,Monaco,Consolas,"Andale Mono","lucida console","Courier New",monospace;}#iframeResult{height:300px}.form-inline{padding:6px 0 2px 0}}.logo h1{background-image:url(/images/logo-domain-white.png);background-repeat:no-repeat;text-indent:-9999px;width:160px;height:39px;margin-top:10px;display:block}
+	</style>
+	<nav class="navbar navbar-default navbar-fixed-top" style="background: #96b97d;">
+		<div class="container">
+		<div class="navbar-header logo"><h1 onClick="window.open('//www.runoob.com')">HOWEWORK</h1>
+		</div>
+		</div>
+	</nav>
+	<div class="container">
+	<div class="row">
+	<div class="col-sm-9">
+	<div class="panel panel-default">
+	<div class="panel-heading">
+	<form class="form-inline">
+	<div class="row">
+	<div class="col-xs-6">
+	<button type="button" class="btn btn-default">Display：</button>
+	</div>
+	<div class="col-xs-6 text-right">
+	</div>
+	</div>
+	</form>
+	</div>
+	<div class="panel-body">
+	<div style="display:none;">
+        <h3>Task 4: Resolution</h3>
+        <div id = "task4">
+            <button id = "Res64">64 x 64</button>
+            <button id = "Res128">128 x 128</button>
+            <button id = "Res256">256 x 256</button>
+        </div>
+        <h3>Task 1: Cube缩放</h3>
+        <div id = "task1">
+            Scale 0<input id = "ScaleSlider" type = "range" min = "0.0" max = "2.0" step = "0.05" value = "1"/>2
+        </div>
+        <h3>Task 2: 切换投影方式</h3>
+        <div id = "task2">
+            Current Projection Type: <button id="ProjectionTypeButton">Ortho</button>
+        </div>
+        <h3>Task 3: 漫游的实现</h3>
+        <div id = "task3-1"><table><tr>
+                <td><div id = "task3-1">
+                    <table>
+                        <tr><td>radius</td> <td>0.05</td> 
+                            <td><input id = "radiusSlider"  type = "range" min = "0.05" max = "2"   step = "0.05" value = "1" />2</td></tr>
+                        <tr><td>theta</td>  <td>-180</td>
+                            <td><input id = "thetaSlider"   type = "range" min = "-180" max = "180" step = "5"    value = "0" />180</td></tr>
+                        <tr><td>phi</td>    <td>-90</td>     
+                            <td><input id = "phiSlider"     type = "range" min = "-90"  max = "90"  step = "5"    value = "0" />90</td></tr>
+                    </table>
+                </div></td>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td><div id = "task3-3">
+                    <table>
+                        <tr><td>X -2<input id = "xSlider" type = "range" min = "-2.0" max = "2.0" step = "0.01" value = 0/>2</td></tr>
+                        <tr><td>Y -2<input id = "ySlider" type = "range" min = "-2.0" max = "2.0" step = "0.01" value = 0/>2</td></tr>
+                        <tr><td>Z -2<input id = "zSlider" type = "range" min = "-2.0" max = "2.0" step = "0.01" value = 0/>2</td></tr>
+                    </table>
+                </div></td>
+        </tr></table></div>
+
+        <div id = "task3-2" style="display:none;">
+            <table>
+                <tr>
+                    <td>eye(radius,theta,phi):</td> <td><input id="eyePolar" type="text" style="height:20px;width:300px" /></td>
+                </tr>
+                <tr>
+                    <td>eye(X, Y, Z):</td>          <td><input id="eyeXYZ" type="text" style="height:20px;width:300px" /></td>
+                </tr>
+            </table>
+        </div>
+        
+
+    </div>
+            
+    <div>
+        <canvas id="gl-canvas" width="650" height="650">
+        Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+    </div>
+
+	</div>
+	</div>
+	</div>
+	<div class="col-sm-3">
+	<div class="panel panel-default">
+	<div class="panel-heading"><form class="form-inline"> <button type="button" class="btn btn-default">Operation</button></form></div>
+	<div class="panel-body">
+		<br>
+			<text> W/S键控制视点绕X轴旋转 </text>
+		<br><br>
+			<text> A/D 键控制视点绕Z轴旋转 </text>
+        <br><br>
+            <text> J/L键对对象进行缩放操作 </text>
+        <br><br>
+            <text> P切换视角 </text>
+	</div>
+	</div>
+	</div>
+	</div>
+	
+	</div>
+</body>
+</html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+    attribute vec4 vPosition;
+    
+    uniform mat4 u_scaleMatrix;
+    uniform mat4 u_modelViewMatrix;
+    uniform mat4 u_projectionMatrix;
+
+    void main() {
+        gl_Position = vec4(vPosition.x, vPosition.y, vPosition.z, 1.0);
+        gl_Position = u_projectionMatrix * u_modelViewMatrix * u_scaleMatrix * vPosition;
+    } 
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform vec4 fColor;
+
+    void main() {
+        gl_FragColor = fColor;
+    }
+</script>
